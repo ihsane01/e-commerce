@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Products;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -16,6 +17,10 @@ class ProductsController extends Controller
     public function getProducts()
     {
         return Products::all();
+    }
+    public function getusers()
+    {
+        return User::all();
     }
     
     public function getProductsbycategorie($cat)
@@ -75,12 +80,7 @@ class ProductsController extends Controller
             'id_cat'=>'required',
         ]);
         $product=Products::find($id);
-        //     if(is_null($product)){
-        //     return response()->json(['message=>product introuvable'],404);
-        //     }
-        //    $product->update(request()->all());
-        //  return response($product,200) ;
-        // return response($product,201);
+     
     if ($request->hasFile('image'))
           {
            
@@ -110,7 +110,6 @@ else
     public function delete(Request $request, $id)
     {
         $products= Products::all();
-
         $product=Products::find($id);
         if(is_null($product)){
             return response()->json(['message=>product introuvable'],404);      
@@ -132,4 +131,49 @@ else
     {
         //
     }
+
+    public function toggleLikeProduct(Request $request){
+
+
+        $found = false;
+        $user = User::find($request->user_id);
+        $products = $user->products;
+    
+        foreach($products  as $product){
+               if($product->id == $request->product_id){
+                   $found = true;
+               }
+         }
+    
+         if($found){     
+                $user->products()->detach($request->product_id);
+         }
+         else{
+                $user->products()->attach($request->product_id);
+         }
+    
+        }
+
+        public function listelike(Request $request){
+            $user = User::find($request->user_id);
+            $products = $user->products;
+
+            return response($products,200) ;   
+
+        }
+        public function isLikedProduct(Request $request)
+    {
+        $found = false;
+        $user = User::find($request->user_id);
+        $products = $user->products;
+       
+
+        foreach ($products  as $product) {
+            if ($product->id == $request->product_id) {
+                $found = true;
+            }
+        }
+     return ['state' => $found]; 
+    }
+        
 }

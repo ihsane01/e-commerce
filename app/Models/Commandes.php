@@ -10,7 +10,6 @@ class Commandes extends Model
     use HasFactory;
     protected $fillable=[
         'etat',
-        
         'total',
         'id_client',
         'destination'

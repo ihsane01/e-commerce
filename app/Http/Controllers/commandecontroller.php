@@ -13,12 +13,9 @@ class commandecontroller extends Controller
     public function addcommande(Request $request )
      { $user=User::find($request->id_client);
        $produits=panier::find($request->id_client);
-        $Commande=new Commandes;
-        //  $products=$request->products;
-         
+        $Commande=new Commandes;         
         $Commande->id_client=$request->id_client;
         $Commande->total=$request->total;
-        // $Commande->date_cmd= (new DateTime())->setTimestamp($request->date_cmd)->format('y-m-d H:i:s');
         $Commande->destination=$user->adresse;
         $Commande->save();
 
@@ -37,18 +34,54 @@ class commandecontroller extends Controller
 
     }
     
+
+
+
+
+
+
+
+
+
     public function showcommande($id)
  {
-       if(!$id){
-        return response()->json(['message=> id introuvable'],404);      
-
-    }
+       if(!$id){return response()->json(['message=> id introuvable'],404);       }
     $commandes = Commandes::where('id_client',$id)->get();
-
 
     return response($commandes,200) ;        
         
 
      
     }
-}
+    public function listecommande(){
+       $commandes= Commandes::all();
+    
+       foreach($commandes as $cmd){
+        $imagepro=panier::where('id_cmd',$cmd->id);
+       }
+       return (object)['imagepro'=>$imagepro ,'commande'=>$commandes];
+
+
+
+    }
+    public function updatecommande($id,Request $request ){
+        $request->validate([
+            'etat'=>'required',
+        ]);
+        $commande=Commandes::find($id);
+
+    
+        if(is_null($request->etat)){
+        return response()->json(['message=>product introuvable'],404);    }
+        $commande->etat=$request->etat;
+        $commande->save();
+         return response($request->etat,200) ;
+       
+       
+    }
+
+
+
+
+    }
+

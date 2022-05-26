@@ -61,4 +61,5 @@ public function logout(Request $request) {
             'message' => 'Logged out'
         ];
     } 
+    
 }

@@ -13,7 +13,7 @@ class Commentaires extends Model
         'nom',
         'id_produit',
         'commentaire',
-        'image'
+      
         ];
 
     public function user(){

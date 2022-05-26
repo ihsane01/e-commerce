@@ -12,22 +12,26 @@ class CommentaireController extends Controller
 {
     
 
-    public function StoreReview(Request $request, $id)
+    public function StoreReview(Request $request)
     {
-        $request->validate([
-            'commentaire'=>'required|min:3'
-        ]);
+
         $review=new Commentaires();
-       // $request->id_client = request()->user()->id;
-        $request->id_client = auth('sanctum')->user()->id;
-        $request['id_produit'] = $id;
-        $review->id_client=$request->id_client;
-        $review->id_produit=$request->id_produit;
-        $review->commentaire=$request->commentaire;
-        $user = User::where('id',$request->id_client);
-        $request->nom = $user->name;
-        $review->nom=$request->nom;
-        $review->image=$request->image;
+        $idProduct = $request->productId;
+        $idCli = $request->id_client;
+        $user = User::where('id',$idCli)->first();
+        if(is_null($idProduct))
+        {
+            return response()->json(['message=>product introuvable'],404);   
+        }
+        
+        else if(is_null($user))
+        {
+            return response()->json(['message=>product introuvable'],404);   
+        }
+        $review->id_client = $idCli;
+        $review->nom = $user->name;
+        $review->id_produit = $idProduct ;
+        $review->commentaire = $request->commentaire;
         $review->save();
         return response()->json("Comment stored to be reviewed");
     }

@@ -17,9 +17,19 @@ class Products extends Model
         'id_cat',
      ];
 
-public function user(){
-    return $this->belongsTo(User::class);
-}
+// public function user(){
+//     return $this->belongsTo(User::class);
+// }
 public function categorie(){
     return $this->belongsTo(Categories::class);
-}}
+}
+public function users()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'products_users',
+            'product_id',
+            'user_id'
+        );
+    }
+}

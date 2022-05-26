@@ -31,6 +31,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 
 });
 Route::get('Products',[ProductsController::class,'getProducts']);
+Route::get('users',[ProductsController::class,'getusers']);
 
 Route::get('Product/{id}',[ProductsController::class,'getProductByid']);
 Route::post('Addproduct',[ProductsController::class,'Addproduct']);
@@ -50,7 +51,7 @@ Route::delete('deletecategories/{id}',[categoriecontroller::class,'deletecategor
 
 Route::post('AddFile',[fileController::class,'AddFile']);
 
-Route::post('AddComment/{id}',[CommentaireController::class,'StoreReview'])->middleware('auth:sanctum');
+Route::post('AddComment',[CommentaireController::class,'StoreReview']);
 Route::get('Comments/{id}',[CommentaireController::class,'getComments']);
 
 Route::delete('deletepanier/{id}',[paniercontroller::class,'deletecart']);
@@ -60,5 +61,11 @@ Route::get('listepanier/{id}',[paniercontroller::class,'showcart']);
 
 
 Route::get('showcommande/{id}',[commandecontroller::class,'showcommande']);
+Route::get('listecommande',[commandecontroller::class,'listecommande']);
 Route::post('addcommande',[commandecontroller::class,'addcommande']);
+Route::post('updatecommande/{id}',[commandecontroller::class,'updatecommande']); 
+Route::post('commendeimage/{id}',[commandecontroller::class,'commendeimage']); 
 
+Route::post('product/like',[Productscontroller::class, 'toggleLikeProduct']) ;
+Route::post('product/islike', [Productscontroller::class, 'isLikedProduct']);
+Route::post('product/listlike', [Productscontroller::class, 'listelike']);

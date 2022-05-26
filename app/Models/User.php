@@ -57,4 +57,13 @@ class User extends Authenticatable
     public function commande(){
         return $this->hasMany(Commandes::class);
           }
+
+    public function products()
+    {
+        return $this->belongsToMany(
+            Products::class,
+            'products_users',
+            'user_id',
+            'product_id' );
+    }
 }
